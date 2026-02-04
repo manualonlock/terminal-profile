@@ -29,7 +29,18 @@ local  plugins = {
 	  'nvim-treesitter/nvim-treesitter',
 	  lazy = false,
 	  build = ':TSUpdate'
-	}
+	},
+	{
+	    "nvim-neo-tree/neo-tree.nvim",
+	    branch = "v3.x",
+	    dependencies = {
+	      "nvim-lua/plenary.nvim",
+	      "MunifTanjim/nui.nvim",
+	      "nvim-tree/nvim-web-devicons", 
+	    },
+	    lazy = false, 
+	  }
+
 } 
 local  opts = {}
 require("lazy").setup(plugins, opts) 
@@ -52,4 +63,4 @@ require('telescope').setup({
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 require'nvim-treesitter'.install { 'rust', 'javascript', 'zig' }
-
+vim.keymap.set('n', '<leader>b', ':Neotree filesystem reveal left<CR>', { desc = 'Open File Explorer' })

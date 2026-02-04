@@ -14,13 +14,15 @@ setopt VI
 
 # Set ls color scheme
 VIVID_COLOR_SCHEME = "molokai"
-export LS_COLORS=$(vivid generate $(VIVID_COLOR_SCHEME))
+export LS_COLORS=$(vivid generate "$VIVID_COLOR_SCHEME")
 
 # Init the posh config, ignore in Iterm
 export POSH_CONFIG_FILE_PATH="$HOME/.config/posh/posh.json"
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
 eval "$(oh-my-posh init zsh --config $POSH_CONFIG_FILE_PATH)"
 fi
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Source out of autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
