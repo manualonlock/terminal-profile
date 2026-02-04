@@ -13,7 +13,7 @@ alias vim='nvim'
 setopt VI
 
 # Set ls color scheme
-export VIVID_COLOR_SCHEME = "molokai"
+export VIVID_COLOR_SCHEME="molokai"
 export LS_COLORS=$(vivid generate "$VIVID_COLOR_SCHEME")
 
 # Init the posh config, ignore in Iterm
@@ -27,3 +27,4 @@ fi
 
 # Source out of autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+neofetch
