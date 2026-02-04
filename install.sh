@@ -1,20 +1,3 @@
-ensure_brew() {
-    if command -v brew >/dev/null 2>&1; then
-        echo "Homebrew is already installed."
-    else
-        echo "Homebrew not found. Installing..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        
-        # Add Linuxbrew to PATH if on Linux
-        if [ "$(uname)" = "Linux" ]; then
-            echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
-            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        fi
-
-        echo "Homebrew installation complete."
-    fi
-}
-
 detect_pm() {
   if command -v brew >/dev/null 2>&1; then
     echo "brew"
@@ -46,8 +29,9 @@ brew_install_packages() {
     nvim
 }
 
-# will not be unused for as long as defaulting to homebrew 
 apt_install_packages() {
+  # The freshest posh version will not be found in the apt repository
+  curl -s https://ohmyposh.dev/install.sh | bash -s
   sudo apt-get update
   sudo apt-get install -y \
     fonts-hack \
@@ -59,19 +43,17 @@ apt_install_packages() {
     virtualenv
 }
 
-# case "$PM" in
-#   brew)
-#     brew_install_packages
-#     ;;
-#   apt)
-#     apt_install_packages
-#     ;;
-#   *)
-#     echo "No supported package manager found"
-#     ;;
-# esac
-ensure_brew
-brew_install_packages
+case "$PM" in
+  brew)
+    brew_install_packages
+    ;;
+  apt)
+    apt_install_packages
+    ;;
+  *)
+    echo "No supported package manager found"
+    ;;
+esac
 
 # Copy to .config
 for config_dir in posh nvim neofetch ghostty zshrc; do

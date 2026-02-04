@@ -22,7 +22,8 @@ if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
 eval "$(oh-my-posh init zsh --config $POSH_CONFIG_FILE_PATH)"
 fi
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# TODO: figure out if needed for darwin builds 
+# eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Source out of autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
