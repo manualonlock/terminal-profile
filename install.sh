@@ -29,6 +29,13 @@ brew_install_packages() {
     nvim
 }
 
+install_nvim_appimage() {
+  mkdir -p ~/.local/bin
+  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+  chmod u+x nvim.appimage
+  mv nvim.appimage ~/.local/bin/nvim
+}
+
 apt_install_packages() {
   # The freshest posh version will not be found in the apt repository
   curl -s https://ohmyposh.dev/install.sh | bash -s
@@ -41,6 +48,7 @@ apt_install_packages() {
     neofetch \
     bat \
     virtualenv
+  install_nvim_appimage
 }
 
 case "$PM" in
