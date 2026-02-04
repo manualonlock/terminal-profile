@@ -80,8 +80,10 @@ done
 
 # Install ZSH autocompletion
 mkdir -p ~/.zsh
-git clone https://github.com/zsh-users/zsh-autosuggestions \
-  ~/.zsh/zsh-autosuggestions
+if [ ! -e ~/.zsh/zsh-autosuggestions ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+      ~/.zsh/zsh-autosuggestions
+fi
 
 # Source from configured .zshrc (only if exists)
 LINE='source ~/.config/zshrc/.zshrc'
