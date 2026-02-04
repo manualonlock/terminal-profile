@@ -29,11 +29,20 @@ brew_install_packages() {
     nvim
 }
 
-install_nvim_appimage() {
+install_nvim_tarball() {
   mkdir -p ~/.local/bin
-  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-  chmod u+x nvim.appimage
-  mv nvim.appimage ~/.local/bin/nvim
+  ARCH=$(uname -m)
+  if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    NVIM_ARCH="nvim-linux-arm64"
+  else
+    NVIM_ARCH="nvim-linux-x86_64"
+  fi
+  curl -LO "https://github.com/neovim/neovim/releases/latest/download/${NVIM_ARCH}.tar.gz"
+  tar xzf "${NVIM_ARCH}.tar.gz"
+  rm -rf ~/.local/"${NVIM_ARCH}"
+  mv "${NVIM_ARCH}" ~/.local/
+  ln -sf ~/.local/"${NVIM_ARCH}"/bin/nvim ~/.local/bin/nvim
+  rm "${NVIM_ARCH}.tar.gz"
 }
 
 apt_install_packages() {
@@ -48,7 +57,7 @@ apt_install_packages() {
     neofetch \
     bat \
     virtualenv
-  install_nvim_appimage
+  install_nvim_tarball
 }
 
 case "$PM" in
