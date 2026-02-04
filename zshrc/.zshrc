@@ -1,4 +1,7 @@
-# Aliases 
+# Add local bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Aliases
 alias pip=pip3
 alias pip-login='cd $HOME/Projects/monorepo && task pip-login && source pip.env && cd -'
 alias npm-login='cd $HOME/Projects/monorepo && task npm-login && source npm.env && cd -'
