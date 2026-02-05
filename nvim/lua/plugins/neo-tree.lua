@@ -7,7 +7,4 @@ return {
 		"nvim-tree/nvim-web-devicons",
 	},
 	lazy = false,
-	config = function()
-		vim.keymap.set("n", "<leader>b", ":Neotree filesystem reveal left<CR>", { desc = "Open File Explorer" })
-	end,
 }

@@ -1,6 +1,5 @@
 vim.g.mapleader = " "
 vim.cmd("set number")
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -19,3 +18,4 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
+require("keybindings").setup()
