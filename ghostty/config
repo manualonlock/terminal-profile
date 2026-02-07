@@ -2,6 +2,6 @@ theme = Catppuccin Mocha
 font-family = "JetBrains Mono"
 background-opacity = 0.5
 macos-icon = custom-style
-macos-icon-ghost-color = #4C4F69
+macos-icon-ghost-1111color = #4C4F69
 macos-icon-screen-color = #DF8E1D
 

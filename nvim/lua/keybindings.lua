@@ -26,9 +26,51 @@ function M.setup()
 	end
 
 	-- ============================================
+	-- Window navigation
+	-- ============================================
+	vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+	vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to below window" })
+	vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to above window" })
+	vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+	-- ============================================
 	-- Neo-tree
 	-- ============================================
-	vim.keymap.set("n", "<leader>b", ":Neotree filesystem reveal left<CR>", { desc = "Open file explorer" })
+	vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle<cr>", { desc = "Open file explorer" })
+	require("neo-tree").setup({
+	  filesystem = {
+	    filtered_items = {
+	      hide_dotfiles = false,
+	    },
+	  },
+	  window = {
+	    mappings = {
+	      ["o"] = { "open", nowait = true },
+      ["<leader>y"] = function(state)
+        local node = state.tree:get_node()
+        local name = node.name
+        vim.fn.setreg("+", name)
+        vim.notify("Copied: " .. name)
+      end,
+      ["<leader>Y"] = function(state)
+        local node = state.tree:get_node()
+        local path = node:get_id()
+        vim.fn.setreg("+", path)
+        vim.notify("Copied: " .. path)
+      end,
+	      ["oc"] = "noop",
+	      ["od"] = "noop",
+	      ["og"] = "noop",
+	      ["om"] = "noop",
+	      ["on"] = "noop",
+	      ["oo"] = "noop",
+	      ["op"] = "noop",
+	      ["os"] = "noop",
+	      ["ot"] = "noop",
+	    },
+	  },
+	})
+
 end
 
 return M
