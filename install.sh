@@ -90,3 +90,9 @@ FILE="$HOME/.zshrc"
 touch "$FILE"
 # append only if missing
 grep -qxF "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+
+# Git aliases
+if command -v git >/dev/null 2>&1; then
+  git config --global alias.co checkout
+  git config --global alias.ci commit
+fi
