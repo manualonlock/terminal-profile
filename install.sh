@@ -26,7 +26,8 @@ brew_install_packages() {
     neofetch \
     bat \
     virtualenv \
-    nvim
+    nvim \
+    glow
 }
 
 install_nvim_tarball() {
@@ -56,7 +57,8 @@ apt_install_packages() {
     fzf \
     neofetch \
     bat \
-    virtualenv
+    virtualenv \
+    glow
   install_nvim_tarball
 }
 
