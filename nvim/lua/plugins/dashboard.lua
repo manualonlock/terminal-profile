@@ -85,6 +85,12 @@ return {
 						action = "Neotree toggle",
 					},
 					{
+						icon = "  ",
+						desc = "Diff view",
+						key = "d",
+						action = "DiffviewOpen",
+					},
+					{
 						icon = "󰅙  ",
 						desc = "Quit",
 						key = "q",
