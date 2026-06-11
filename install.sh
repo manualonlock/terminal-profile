@@ -28,6 +28,9 @@ brew_install_packages() {
     virtualenv \
     nvim \
     glow
+
+  brew install --cask \
+    handy
 }
 
 install_nvim_tarball() {
