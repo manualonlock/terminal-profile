@@ -14,6 +14,21 @@ detect_pm() {
   fi
 }
 
+INSTALL_DESKTOP=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --desktop)
+      INSTALL_DESKTOP=true
+      ;;
+    *)
+      echo "Unknown option: $arg"
+      echo "Usage: $0 [--desktop]"
+      exit 1
+      ;;
+  esac
+done
+
 PM="$(detect_pm)"
 
 brew_install_packages() {
@@ -29,8 +44,12 @@ brew_install_packages() {
     nvim \
     glow
 
-  brew install --cask \
-    handy
+  if [ "$INSTALL_DESKTOP" = true ]; then
+    brew install --cask \
+      handy \
+      homerow \
+      deepl
+  fi
 }
 
 install_nvim_tarball() {
