@@ -48,7 +48,10 @@ brew_install_packages() {
     brew install --cask \
       handy \
       homerow \
-      deepl
+      deepl \
+      caffeine \
+      thaw \
+      obsidian
   fi
 }
 
@@ -84,6 +87,15 @@ apt_install_packages() {
   install_nvim_tarball
 }
 
+install_hermes_agent() {
+  if command -v hermes >/dev/null 2>&1 || [ -x "$HOME/.local/bin/hermes" ]; then
+    echo "Hermes Agent is already installed"
+    return
+  fi
+
+  curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+}
+
 case "$PM" in
   brew)
     brew_install_packages
@@ -95,6 +107,8 @@ case "$PM" in
     echo "No supported package manager found"
     ;;
 esac
+
+install_hermes_agent
 
 # Copy to .config
 for config_dir in posh nvim neofetch ghostty zshrc; do
