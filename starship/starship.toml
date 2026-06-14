@@ -1,0 +1,69 @@
+add_newline = false
+palette = "terminal_profile"
+
+format = """
+$sudo\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$status\
+$character"""
+
+[palettes.terminal_profile]
+base = "#1e1e2e"
+text = "#cdd6f4"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+green = "#a6e3a1"
+mauve = "#cba6f7"
+red = "#f38ba8"
+
+[sudo]
+disabled = false
+symbol = "  "
+style = "fg:base bg:yellow"
+format = "[$symbol]($style)"
+
+[username]
+show_always = true
+style_user = "fg:base bg:text"
+style_root = "fg:base bg:yellow"
+format = "[ $user]($style)"
+
+[hostname]
+ssh_only = false
+style = "fg:base bg:text"
+format = "[@$hostname ]($style)"
+
+[directory]
+style = "fg:base bg:blue"
+format = "[](fg:text bg:blue)[ $path ]($style)"
+truncation_length = 4
+truncate_to_repo = false
+
+[git_branch]
+symbol = " "
+style = "fg:base bg:green"
+format = "[](fg:blue bg:green)[ $symbol$branch ]($style)"
+
+[git_status]
+style = "fg:base bg:green"
+format = "[$all_status$ahead_behind ]($style)"
+
+[python]
+symbol = " "
+style = "fg:base bg:mauve"
+format = "[](fg:green bg:mauve)[ $symbol$virtualenv $version ]($style)"
+
+[status]
+disabled = false
+style = "fg:text bg:red"
+format = "[](fg:mauve bg:red)[ $status ]($style)"
+
+[character]
+success_symbol = "[](fg:green)"
+error_symbol = "[](fg:red)"
+vimcmd_symbol = "[](fg:blue)"

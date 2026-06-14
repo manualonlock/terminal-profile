@@ -34,8 +34,8 @@ PM="$(detect_pm)"
 brew_install_packages() {
   brew install \
     font-hack-nerd-font \
-    vivid \
-    lsd \
+    starship \
+    eza \
     fzf \
     fastfetch \
     bat \
@@ -102,28 +102,55 @@ install_fastfetch_deb() {
   rm "$FASTFETCH_DEB"
 }
 
-apt_install_packages() {
-  sudo apt-get update
-  sudo apt-get install -y \
-    fonts-hack \
-    vivid \
-    lsd \
-    fzf \
-    bat \
-    virtualenv \
-    glow
-  install_fastfetch_deb
-  install_nvim_tarball
-}
-
-install_oh_my_posh() {
-  if command -v oh-my-posh >/dev/null 2>&1 || [ -x "$HOME/.local/bin/oh-my-posh" ]; then
-    echo "Oh My Posh is already installed"
+install_starship() {
+  if command -v starship >/dev/null 2>&1 || [ -x "$HOME/.local/bin/starship" ]; then
+    echo "Starship is already installed"
     return
   fi
 
   mkdir -p "$HOME/.local/bin"
-  curl -fsSL https://ohmyposh.dev/install.sh | bash -s -- -d "$HOME/.local/bin"
+  curl -fsSL https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
+}
+
+install_eza() {
+  if command -v eza >/dev/null 2>&1 || [ -x "$HOME/.local/bin/eza" ]; then
+    echo "eza is already installed"
+    return
+  fi
+
+  case "$(uname -m)" in
+    x86_64)
+      EZA_ARCH="x86_64"
+      ;;
+    aarch64|arm64)
+      EZA_ARCH="aarch64"
+      ;;
+    *)
+      echo "Unsupported eza architecture: $(uname -m)"
+      return 1
+      ;;
+  esac
+
+  EZA_ARCHIVE="/tmp/eza.tar.gz"
+  curl -fL \
+    "https://github.com/eza-community/eza/releases/latest/download/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz" \
+    -o "$EZA_ARCHIVE"
+  tar -xzf "$EZA_ARCHIVE" -C "$HOME/.local/bin"
+  rm "$EZA_ARCHIVE"
+}
+
+apt_install_packages() {
+  sudo apt-get update
+  sudo apt-get install -y \
+    fonts-hack \
+    fzf \
+    bat \
+    virtualenv \
+    glow
+  install_starship
+  install_eza
+  install_fastfetch_deb
+  install_nvim_tarball
 }
 
 install_hermes_agent() {
@@ -147,11 +174,10 @@ case "$PM" in
     ;;
 esac
 
-install_oh_my_posh
 install_hermes_agent
 
 # Copy to .config
-for config_dir in posh nvim fastfetch ghostty zshrc; do
+for config_dir in starship nvim fastfetch ghostty zshrc; do
   cp -rf "$config_dir" ~/.config/
 done
 

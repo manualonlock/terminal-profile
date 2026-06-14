@@ -4,41 +4,45 @@
     "type": "none"
   },
   "display": {
-    "separator": "  "
+    "separator": "  ",
+    "color": {
+      "keys": "blue",
+      "output": "white"
+    }
   },
   "modules": [
     "break",
     {
       "type": "os",
-      "key": "{#31} OS ",
+      "key": " OS ",
       "format": "{pretty-name} {arch}"
     },
     {
       "type": "kernel",
-      "key": "{#32} VER",
+      "key": " VER",
       "format": "{release}"
     },
     {
       "type": "uptime",
-      "key": "{#33}󰥔 UP "
+      "key": "󰥔 UP "
     },
     {
       "type": "packages",
-      "key": "{#34}󰏗 PKG"
+      "key": "󰏗 PKG"
     },
     {
       "type": "cpu",
-      "key": "{#35} CPU",
+      "key": " CPU",
       "format": "{name} ({cores-logical})"
     },
     {
       "type": "gpu",
-      "key": "{#36} GPU",
+      "key": " GPU",
       "format": "{name}"
     },
     {
       "type": "memory",
-      "key": "{#37}󰍛 MEM",
+      "key": "󰍛 MEM",
       "format": "{used} / {total}"
     },
     {
