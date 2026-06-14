@@ -34,11 +34,9 @@ PM="$(detect_pm)"
 brew_install_packages() {
   brew install \
     font-hack-nerd-font \
-    jandedobbeleer/oh-my-posh/oh-my-posh \
     vivid \
     lsd \
     fzf \
-    neofetch \
     bat \
     virtualenv \
     nvim \
@@ -79,8 +77,6 @@ install_nvim_tarball() {
 }
 
 apt_install_packages() {
-  # The freshest posh version will not be found in the apt repository
-  curl -s https://ohmyposh.dev/install.sh | bash -s
   sudo apt-get update
   sudo apt-get install -y \
     fonts-hack \
@@ -92,6 +88,29 @@ apt_install_packages() {
     virtualenv \
     glow
   install_nvim_tarball
+}
+
+install_oh_my_posh() {
+  if command -v oh-my-posh >/dev/null 2>&1 || [ -x "$HOME/.local/bin/oh-my-posh" ]; then
+    echo "Oh My Posh is already installed"
+    return
+  fi
+
+  mkdir -p "$HOME/.local/bin"
+  curl -fsSL https://ohmyposh.dev/install.sh | bash -s -- -d "$HOME/.local/bin"
+}
+
+install_neofetch() {
+  if command -v neofetch >/dev/null 2>&1 || [ -x "$HOME/.local/bin/neofetch" ]; then
+    echo "Neofetch is already installed"
+    return
+  fi
+
+  mkdir -p "$HOME/.local/bin"
+  curl -fsSL \
+    https://raw.githubusercontent.com/dylanaraps/neofetch/7.1.0/neofetch \
+    -o "$HOME/.local/bin/neofetch"
+  chmod +x "$HOME/.local/bin/neofetch"
 }
 
 install_hermes_agent() {
@@ -115,6 +134,8 @@ case "$PM" in
     ;;
 esac
 
+install_oh_my_posh
+install_neofetch
 install_hermes_agent
 
 # Copy to .config
