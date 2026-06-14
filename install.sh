@@ -37,6 +37,7 @@ brew_install_packages() {
     vivid \
     lsd \
     fzf \
+    fastfetch \
     bat \
     virtualenv \
     nvim \
@@ -76,6 +77,31 @@ install_nvim_tarball() {
   rm "${NVIM_ARCH}.tar.gz"
 }
 
+install_fastfetch_deb() {
+  case "$(uname -m)" in
+    x86_64)
+      FASTFETCH_ARCH="amd64"
+      ;;
+    aarch64|arm64)
+      FASTFETCH_ARCH="aarch64"
+      ;;
+    armv7l)
+      FASTFETCH_ARCH="armv7l"
+      ;;
+    *)
+      echo "Unsupported Fastfetch architecture: $(uname -m)"
+      return 1
+      ;;
+  esac
+
+  FASTFETCH_DEB="/tmp/fastfetch-linux-${FASTFETCH_ARCH}.deb"
+  curl -fL \
+    "https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-${FASTFETCH_ARCH}.deb" \
+    -o "$FASTFETCH_DEB"
+  sudo apt-get install -y "$FASTFETCH_DEB"
+  rm "$FASTFETCH_DEB"
+}
+
 apt_install_packages() {
   sudo apt-get update
   sudo apt-get install -y \
@@ -83,10 +109,10 @@ apt_install_packages() {
     vivid \
     lsd \
     fzf \
-    neofetch \
     bat \
     virtualenv \
     glow
+  install_fastfetch_deb
   install_nvim_tarball
 }
 
@@ -98,19 +124,6 @@ install_oh_my_posh() {
 
   mkdir -p "$HOME/.local/bin"
   curl -fsSL https://ohmyposh.dev/install.sh | bash -s -- -d "$HOME/.local/bin"
-}
-
-install_neofetch() {
-  if command -v neofetch >/dev/null 2>&1 || [ -x "$HOME/.local/bin/neofetch" ]; then
-    echo "Neofetch is already installed"
-    return
-  fi
-
-  mkdir -p "$HOME/.local/bin"
-  curl -fsSL \
-    https://raw.githubusercontent.com/dylanaraps/neofetch/7.1.0/neofetch \
-    -o "$HOME/.local/bin/neofetch"
-  chmod +x "$HOME/.local/bin/neofetch"
 }
 
 install_hermes_agent() {
@@ -135,11 +148,10 @@ case "$PM" in
 esac
 
 install_oh_my_posh
-install_neofetch
 install_hermes_agent
 
 # Copy to .config
-for config_dir in posh nvim neofetch ghostty zshrc; do
+for config_dir in posh nvim fastfetch ghostty zshrc; do
   cp -rf "$config_dir" ~/.config/
 done
 

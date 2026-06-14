@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Terminal profile configuration repository that sets up a complete development environment with ZSH, Neovim, Oh My Posh, Ghostty terminal, and Neofetch. Supports macOS (Homebrew) and Linux (apt, dnf, yum, pacman).
+Terminal profile configuration repository that sets up a complete development environment with ZSH, Neovim, Oh My Posh, Ghostty terminal, and Fastfetch. Supports macOS (Homebrew) and Linux (apt, dnf, yum, pacman).
 
 ## Installation
 
@@ -26,7 +26,7 @@ This script:
 - `nvim/init.lua` - Neovim config using lazy.nvim plugin manager
 - `posh/posh.json` - Oh My Posh prompt theme
 - `ghostty/config` - Ghostty terminal settings (Catppuccin Latte, JetBrains Mono)
-- `neofetch/` - Neofetch display configuration and custom logo
+- `fastfetch/` - Fastfetch system information display configuration
 
 ## Key Configuration Details
 
