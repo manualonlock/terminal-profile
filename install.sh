@@ -48,6 +48,7 @@ brew_install_packages() {
     brew install --cask \
       handy \
       homerow \
+      1password \
       chatgpt \
       deepl \
       caffeine \
