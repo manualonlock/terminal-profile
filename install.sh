@@ -48,6 +48,7 @@ brew_install_packages() {
     brew install --cask \
       handy \
       homerow \
+      chatgpt \
       deepl \
       caffeine \
       thaw \
@@ -55,6 +56,7 @@ brew_install_packages() {
       warp \
       thebrowsercompany-dia \
       betterdisplay \
+      tailscale-app \
       rectangle-pro
   fi
 }
