@@ -51,7 +51,11 @@ brew_install_packages() {
       deepl \
       caffeine \
       thaw \
-      obsidian
+      obsidian \
+      warp \
+      thebrowsercompany-dia \
+      betterdisplay \
+      rectangle-pro
   fi
 }
 
