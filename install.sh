@@ -36,6 +36,8 @@ brew_install_packages() {
     font-hack-nerd-font \
     starship \
     eza \
+    tree-sitter-cli \
+    go \
     fzf \
     fastfetch \
     bat \
@@ -139,16 +141,47 @@ install_eza() {
   rm "$EZA_ARCHIVE"
 }
 
+install_tree_sitter() {
+  if command -v tree-sitter >/dev/null 2>&1 || [ -x "$HOME/.local/bin/tree-sitter" ]; then
+    echo "tree-sitter CLI is already installed"
+    return
+  fi
+
+  case "$(uname -m)" in
+    x86_64)
+      TREE_SITTER_ARCH="x64"
+      ;;
+    aarch64|arm64)
+      TREE_SITTER_ARCH="arm64"
+      ;;
+    *)
+      echo "Unsupported tree-sitter architecture: $(uname -m)"
+      return 1
+      ;;
+  esac
+
+  mkdir -p "$HOME/.local/bin"
+  TREE_SITTER_ARCHIVE="/tmp/tree-sitter.gz"
+  curl -fL \
+    "https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-${TREE_SITTER_ARCH}.gz" \
+    -o "$TREE_SITTER_ARCHIVE"
+  gzip -dc "$TREE_SITTER_ARCHIVE" > "$HOME/.local/bin/tree-sitter"
+  chmod +x "$HOME/.local/bin/tree-sitter"
+  rm "$TREE_SITTER_ARCHIVE"
+}
+
 apt_install_packages() {
   sudo apt-get update
   sudo apt-get install -y \
     fonts-hack \
+    golang-go \
     fzf \
     bat \
     virtualenv \
     glow
   install_starship
   install_eza
+  install_tree_sitter
   install_fastfetch_deb
   install_nvim_tarball
 }
