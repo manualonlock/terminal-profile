@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 detect_pm() {
   if command -v brew >/dev/null 2>&1; then
     echo "brew"
@@ -15,19 +16,25 @@ detect_pm() {
 }
 
 INSTALL_DESKTOP=false
+CONFIGS_ONLY=false
 
 for arg in "$@"; do
   case "$arg" in
     --desktop)
       INSTALL_DESKTOP=true
       ;;
+    --configs-only)
+      CONFIGS_ONLY=true
+      ;;
     *)
       echo "Unknown option: $arg"
-      echo "Usage: $0 [--desktop]"
+      echo "Usage: $0 [--desktop] [--configs-only]"
       exit 1
       ;;
   esac
 done
+
+cd "$(dirname "$0")"
 
 PM="$(detect_pm)"
 
@@ -40,7 +47,15 @@ brew_install_packages() {
     bat \
     virtualenv \
     nvim \
-    glow
+    opencode \
+    go \
+    glow \
+    fastfetch \
+    zoxide \
+    ripgrep \
+    fd \
+    shellcheck \
+    tree-sitter-cli
 
   if [ "$INSTALL_DESKTOP" = true ]; then
     brew install --cask \
@@ -83,7 +98,11 @@ apt_install_packages() {
     vivid \
     lsd \
     fzf \
-    neofetch \
+    fastfetch \
+    zoxide \
+    ripgrep \
+    fd-find \
+    shellcheck \
     bat \
     virtualenv \
     glow
@@ -100,19 +119,6 @@ install_oh_my_posh() {
   curl -fsSL https://ohmyposh.dev/install.sh | bash -s -- -d "$HOME/.local/bin"
 }
 
-install_neofetch() {
-  if command -v neofetch >/dev/null 2>&1 || [ -x "$HOME/.local/bin/neofetch" ]; then
-    echo "Neofetch is already installed"
-    return
-  fi
-
-  mkdir -p "$HOME/.local/bin"
-  curl -fsSL \
-    https://raw.githubusercontent.com/dylanaraps/neofetch/7.1.0/neofetch \
-    -o "$HOME/.local/bin/neofetch"
-  chmod +x "$HOME/.local/bin/neofetch"
-}
-
 install_hermes_agent() {
   if command -v hermes >/dev/null 2>&1 || [ -x "$HOME/.local/bin/hermes" ]; then
     echo "Hermes Agent is already installed"
@@ -122,43 +128,69 @@ install_hermes_agent() {
   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 }
 
-case "$PM" in
-  brew)
-    brew_install_packages
-    ;;
-  apt)
-    apt_install_packages
-    ;;
-  *)
-    echo "No supported package manager found"
-    ;;
-esac
+install_packages() {
+  case "$PM" in
+    brew)
+      brew_install_packages
+      ;;
+    apt)
+      apt_install_packages
+      ;;
+    *)
+      echo "No supported package manager found"
+      ;;
+  esac
 
-install_oh_my_posh
-install_neofetch
-install_hermes_agent
+  install_oh_my_posh
+  install_hermes_agent
+}
 
-# Copy to .config
-for config_dir in posh nvim neofetch ghostty zshrc; do
-  cp -rf "$config_dir" ~/.config/
-done
+clone_or_update() {
+  if [ -d "$2/.git" ]; then
+    git -C "$2" pull --quiet --ff-only || true
+  else
+    git clone --depth 1 "$1" "$2"
+  fi
+}
 
-# Install ZSH autocompletion
-mkdir -p ~/.zsh
-if [ ! -e ~/.zsh/zsh-autosuggestions ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions \
-      ~/.zsh/zsh-autosuggestions
+install_configs() {
+  mkdir -p ~/.config
+
+  # A leftover kickstart.nvim checkout breaks the merge-copy below; move it aside once
+  if [ -d ~/.config/nvim/lua/kickstart ]; then
+    backup=~/.config/nvim.bak.$(date +%Y%m%d%H%M%S)
+    echo "Backing up old Neovim config to $backup"
+    mv ~/.config/nvim "$backup"
+  fi
+
+  for config_dir in posh nvim fastfetch ghostty zshrc; do
+    cp -rf "$config_dir" ~/.config/
+  done
+
+  # ZSH plugins
+  mkdir -p ~/.zsh
+  clone_or_update https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+  clone_or_update https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+  curl -fsSL \
+    https://raw.githubusercontent.com/catppuccin/zsh-syntax-highlighting/main/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh \
+    -o ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh || true
+
+  # Source from configured .zshrc (append only if missing)
+  LINE='source ~/.config/zshrc/.zshrc'
+  FILE="$HOME/.zshrc"
+  touch "$FILE"
+  grep -qxF "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+}
+
+if [ "$CONFIGS_ONLY" = false ]; then
+  install_packages
 fi
-
-# Source from configured .zshrc (only if exists)
-LINE='source ~/.config/zshrc/.zshrc'
-FILE="$HOME/.zshrc"
-touch "$FILE"
-# append only if missing
-grep -qxF "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+install_configs
 
 # Git aliases
 if command -v git >/dev/null 2>&1; then
   git config --global alias.co checkout
   git config --global alias.ci commit
 fi
+
+echo "Done. Open a new Ghostty window (or run: exec zsh) to see the changes."

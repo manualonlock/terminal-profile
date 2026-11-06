@@ -4,12 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Terminal profile configuration repository that sets up a complete development environment with ZSH, Neovim, Oh My Posh, Ghostty terminal, and Neofetch. Supports macOS (Homebrew) and Linux (apt, dnf, yum, pacman).
+Terminal profile configuration repository that sets up a complete development environment with ZSH, Neovim, Oh My Posh, Ghostty terminal, and Fastfetch. Supports macOS (Homebrew) and Linux (apt, dnf, yum, pacman).
 
 ## Installation
 
 ```bash
-./install.sh
+./install.sh                 # full install
+./install.sh --configs-only  # only re-copy configs (re-apply theme)
 ```
 
 This script:
@@ -25,14 +26,14 @@ This script:
 - `zshrc/.zshrc` - ZSH configuration (aliases, VI mode, Oh My Posh init, vivid colors)
 - `nvim/init.lua` - Neovim config using lazy.nvim plugin manager
 - `posh/posh.json` - Oh My Posh prompt theme
-- `ghostty/config` - Ghostty terminal settings (Catppuccin Latte, JetBrains Mono)
-- `neofetch/` - Neofetch display configuration and custom logo
+- `ghostty/config` - Ghostty terminal settings (Catppuccin Mocha, JetBrains Mono, blur)
+- `fastfetch/config.jsonc` - Fastfetch greeting shown on shell start
 
 ## Key Configuration Details
 
-**ZSH**: VI mode enabled, uses vivid with molokai color scheme, aliases `ls`→`lsd`, `cat`→`bat`, `vim`→`nvim`
+**ZSH**: VI mode enabled, Catppuccin Mocha colors (vivid, bat, fzf, syntax highlighting), fzf + zoxide, aliases `ls`→`lsd`, `cat`→`bat`, `vim`→`nvim`
 
-**Neovim**: Leader key is Space. Key plugins: Catppuccin (theme), Telescope (fuzzy finder), Treesitter (syntax), Neo-tree (file explorer)
+**Neovim**: Leader key is Space. Key plugins: Catppuccin (theme), Telescope, Treesitter (main branch, needs Neovim 0.12 + tree-sitter CLI), Neo-tree, Mason + mason-lspconfig v2 + blink.cmp (LSP/completion), lualine, which-key
 
 **Neovim Keybindings**:
 - `<leader>ff` - Find files
