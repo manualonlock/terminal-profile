@@ -42,8 +42,7 @@ function M.setup()
 	-- ============================================
 	-- Function/class navigation
 	-- ============================================
-	vim.keymap.set("n", "<leader>j", "]m", { remap = true, desc = "Next function/method" })
-	vim.keymap.set("n", "<leader>k", "[m", { remap = true, desc = "Previous function/method" })
+	-- <leader>j / <leader>k (next/previous function) live in plugins/treesitter-textobjects.lua
 
 	-- ============================================
 	-- Diffview

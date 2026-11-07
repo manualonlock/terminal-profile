@@ -1,128 +1,69 @@
+-- Minimal start screen: one small line on top, muted grey items, a red accent,
+-- and a slightly bleak one-liner at the bottom.
+local quotes = {
+	"it worked yesterday.",
+	"nothing compiles forever.",
+	"the bug is not in the code. it is in you.",
+	"ship it. regret it later.",
+	"every abstraction leaks eventually.",
+	"you will rewrite this in six months.",
+	"there is no such thing as a quick fix.",
+	"the tests pass. that proves nothing.",
+	"legacy code is just code that survived.",
+	"close the laptop. it will still be broken tomorrow.",
+}
+
+local function set_highlights()
+	local hl = vim.api.nvim_set_hl
+	hl(0, "DashboardHeader", { fg = "#585b70", bold = true })
+	hl(0, "DashboardIcon", { fg = "#6c7086" })
+	hl(0, "DashboardDesc", { fg = "#a6adc8" })
+	hl(0, "DashboardKey", { fg = "#f38ba8", bold = true })
+	hl(0, "DashboardFooter", { fg = "#585b70", italic = true })
+end
+
 return {
 	"nvimdev/dashboard-nvim",
 	event = "VimEnter",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
-		local header_ns = vim.api.nvim_create_namespace("dashboard_header_colors")
-
-		vim.api.nvim_set_hl(0, "DashboardHeaderRed", { fg = "#E63946", bold = true })
-		vim.api.nvim_set_hl(0, "DashboardHeaderWhite", { fg = "#F1F5F9", bold = true })
-		vim.api.nvim_set_hl(0, "DashboardHeaderBlue", { fg = "#1D4ED8", bold = true })
-
-		vim.api.nvim_create_augroup("DashboardHeaderColors", { clear = true })
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "DashboardLoaded",
-			group = "DashboardHeaderColors",
-			callback = function()
-				local buf = vim.api.nvim_get_current_buf()
-				if vim.bo[buf].filetype ~= "dashboard" then
-					return
-				end
-
-				local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-				vim.api.nvim_buf_clear_namespace(buf, header_ns, 0, -1)
-
-				local in_header = false
-				for row, line in ipairs(lines) do
-					if line:match("%S") then
-						in_header = true
-						local first = line:find("%S") - 1
-						local last = line:match(".*()%S")
-						local width = last - first
-						local third = math.max(1, math.floor(width / 3))
-						local red_end = first + third
-						local white_end = first + (third * 2)
-
-						vim.api.nvim_buf_add_highlight(buf, header_ns, "DashboardHeaderRed", row - 1, first, red_end)
-						vim.api.nvim_buf_add_highlight(
-							buf,
-							header_ns,
-							"DashboardHeaderWhite",
-							row - 1,
-							red_end,
-							white_end
-						)
-						vim.api.nvim_buf_add_highlight(buf, header_ns, "DashboardHeaderBlue", row - 1, white_end, -1)
-
-						local title_col = line:find("N E O V I M", 1, true)
-						if title_col then
-							vim.api.nvim_buf_add_highlight(
-								buf,
-								header_ns,
-								"DashboardHeaderBlue",
-								row - 1,
-								title_col - 1,
-								title_col
-							)
-						end
-					elseif in_header then
-						break
-					end
-				end
-			end,
+		set_highlights()
+		vim.api.nvim_create_autocmd("ColorScheme", {
+			group = vim.api.nvim_create_augroup("UserDashboardColors", { clear = true }),
+			callback = set_highlights,
 		})
+
+		math.randomseed(os.time())
+		local quote = quotes[math.random(#quotes)]
+
+		local function item(icon, desc, key, action)
+			return { icon = icon .. "  ", desc = desc, key = key, key_format = "  %s", action = action }
+		end
 
 		require("dashboard").setup({
 			theme = "doom",
+			hide = { statusline = true, tabline = true },
 			config = {
+				vertical_center = true,
+				header = { "n e o v i m", "", "" },
 				center = {
-					{
-						icon = "  ",
-						desc = "Find file",
-						key = "f",
-						action = "Telescope find_files",
-					},
-					{
-						icon = "󰱼  ",
-						desc = "Live grep",
-						key = "g",
-						action = "Telescope live_grep",
-					},
-					{
-						icon = "󰚰  ",
-						desc = "Open explorer",
-						key = "b",
-						action = "Neotree toggle",
-					},
-					{
-						icon = "  ",
-						desc = "Diff view",
-						key = "d",
-						action = "DiffviewOpen",
-					},
-					{
-						icon = "󰅙  ",
-						desc = "Quit",
-						key = "q",
-						action = "qa",
-					},
+					item("", "find file", "f", "Telescope find_files"),
+					item("", "recent", "r", "Telescope oldfiles"),
+					item("", "grep", "g", "Telescope live_grep"),
+					item("", "explorer", "b", "Neotree toggle"),
+					item("", "diff", "d", "DiffviewOpen"),
+					item("", "quit", "q", "qa"),
 				},
-				header = vim.split(
-					[[
-=================     ===============     ===============   ========  ========
-\\ . . . . . . .\\   //. . . . . . .\\   //. . . . . . .\\  \\. . .\\// . . //
-||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||
-|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||
-||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||
-|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . ||
-||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\_ . .|. .||
-|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . ||
-||_-' ||  .|/    || ||    \|.  || `-_|| ||_-' ||  .|/    || ||   | \  / |-_.||
-||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \  / |  `||
-||    `'         || ||         `'    || ||    `'         || ||   | \  / |   ||
-||            .===' `===.         .==='.`===.         .===' /==. |  \/  |   ||
-||         .=='   \_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \/  |   ||
-||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \/  |   ||
-||   .=='    _-'          '-__\._-'         '-_./__-'         `' |. /|  |   ||
-||.=='    _-'                                                     `' |  /==.||
-=='    _-'                        N E O V I M                         \/   `==
-\   _-'                                                                `-_   /
- `''                                                                      ```
-					]],
-					"\n",
-					{ trimempty = true }
-				),
-
+				footer = function()
+					local stats = require("lazy").stats()
+					return {
+						"",
+						"",
+						quote,
+						"",
+						string.format("%d plugins · %.0f ms", stats.loaded, stats.startuptime),
+					}
+				end,
 			},
 		})
 	end,

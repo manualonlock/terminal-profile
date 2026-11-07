@@ -1,5 +1,7 @@
 # Theme — Catppuccin Mocha (bundled with Ghostty)
 theme = Catppuccin Mocha
+# Pure black background instead of Mocha's blue-grey base
+background = #000000
 
 # Font (Ghostty ships Nerd Font symbols built in, no patched font needed)
 font-family = "JetBrains Mono"
@@ -39,3 +41,6 @@ macos-icon-screen-color = #1E1E2E,#313244
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
 quick-terminal-position = top
 quick-terminal-animation-duration = 0.15
+
+# tmux prefix on macOS: Cmd+B sends Ctrl+B (tmux itself can't see Cmd)
+keybind = cmd+b=text:\x02

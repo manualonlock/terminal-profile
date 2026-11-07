@@ -104,7 +104,6 @@ return {
 		"saghen/blink.cmp",
 		version = "1.*", -- release tag => prebuilt fuzzy-matcher binary
 		event = { "InsertEnter", "CmdlineEnter" },
-		dependencies = { "rafamadriz/friendly-snippets" },
 		opts = {
 			keymap = { preset = "default" }, -- <C-y> accept, <C-n>/<C-p> navigate, <C-space> open
 			appearance = { nerd_font_variant = "mono" },
@@ -115,12 +114,21 @@ return {
 			},
 			signature = { enabled = true, window = { border = "rounded" } },
 			sources = {
-				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+				-- No generic snippet packs (they produced junk like `datetime` for any word);
+				-- buffer words are only offered when the LSP has nothing.
+				default = { "lazydev", "lsp", "path", "buffer" },
 				providers = {
 					lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+					buffer = { min_keyword_length = 3 },
 				},
 			},
-			fuzzy = { implementation = "prefer_rust_with_warning" },
+			fuzzy = {
+				implementation = "prefer_rust_with_warning",
+				-- No typo tolerance: `test` must not match `datetime`
+				max_typos = function()
+					return 0
+				end,
+			},
 		},
 	},
 

@@ -55,7 +55,8 @@ brew_install_packages() {
     ripgrep \
     fd \
     shellcheck \
-    tree-sitter-cli
+    tree-sitter-cli \
+    tmux
 
   if [ "$INSTALL_DESKTOP" = true ]; then
     brew install --cask \
@@ -102,6 +103,7 @@ apt_install_packages() {
     zoxide \
     ripgrep \
     fd-find \
+    tmux \
     shellcheck \
     bat \
     virtualenv \
@@ -163,7 +165,7 @@ install_configs() {
     mv ~/.config/nvim "$backup"
   fi
 
-  for config_dir in posh nvim fastfetch ghostty zshrc; do
+  for config_dir in posh nvim fastfetch ghostty zshrc tmux; do
     cp -rf "$config_dir" ~/.config/
   done
 
