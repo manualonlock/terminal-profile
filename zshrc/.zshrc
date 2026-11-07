@@ -40,6 +40,7 @@ command -v vivid &>/dev/null && export LS_COLORS="$(vivid generate "$VIVID_COLOR
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 export BAT_THEME="Catppuccin Mocha"
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml"   # keep lazygit config in ~/.config on macOS too
 export FZF_DEFAULT_OPTS=" \
   --height=40% --layout=reverse --border=rounded --info=inline-right \
   --color=bg+:#313244,bg:-1,spinner:#f5e0dc,hl:#f38ba8 \
@@ -57,6 +58,7 @@ alias npm-login='cd $HOME/Projects/monorepo && task npm-login && source npm.env 
 alias ecr-login='cd $HOME/Projects/monorepo && task docker-login-ecr-cache && cd -'
 alias project_root="git rev-parse --show-toplevel"
 alias lzd='lazydocker'
+alias lgit='lazygit'
 alias vim='nvim'
 
 if command -v lsd &>/dev/null; then

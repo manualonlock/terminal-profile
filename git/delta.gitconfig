@@ -1,0 +1,31 @@
+# Included from ~/.gitconfig by install.sh — delta as the pager for git diff/log/show
+[core]
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true          # n / N jump between files
+    line-numbers = true
+    features = sbs           # side-by-side; lazygit passes --features=lazygit to skip it
+    hyperlinks = true
+    syntax-theme = Catppuccin Mocha
+    file-style = bold "#cba6f7"
+    file-decoration-style = "#cba6f7" ul
+    hunk-header-style = file line-number syntax
+    hunk-header-decoration-style = "#6c7086" box
+    minus-style = syntax "#3c1f29"
+    minus-emph-style = syntax "#6b2e43"
+    plus-style = syntax "#1f3326"
+    plus-emph-style = syntax "#2f5a3c"
+    line-numbers-minus-style = "#f38ba8"
+    line-numbers-plus-style = "#a6e3a1"
+    line-numbers-zero-style = "#585b70"
+[delta "sbs"]
+    side-by-side = true
+[delta "lazygit"]
+    # lazygit's diff panel is too narrow for side-by-side
+    line-numbers = true
+[merge]
+    conflictStyle = zdiff3
+[diff]
+    colorMoved = default

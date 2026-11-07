@@ -56,7 +56,9 @@ brew_install_packages() {
     fd \
     shellcheck \
     tree-sitter-cli \
-    tmux
+    tmux \
+    lazygit \
+    git-delta
 
   if [ "$INSTALL_DESKTOP" = true ]; then
     brew install --cask \
@@ -104,6 +106,7 @@ apt_install_packages() {
     ripgrep \
     fd-find \
     tmux \
+    git-delta \
     shellcheck \
     bat \
     virtualenv \
@@ -165,7 +168,7 @@ install_configs() {
     mv ~/.config/nvim "$backup"
   fi
 
-  for config_dir in posh nvim fastfetch ghostty zshrc tmux; do
+  for config_dir in posh nvim fastfetch ghostty zshrc tmux lazygit git; do
     cp -rf "$config_dir" ~/.config/
   done
 
@@ -193,6 +196,10 @@ install_configs
 if command -v git >/dev/null 2>&1; then
   git config --global alias.co checkout
   git config --global alias.ci commit
+  # delta pager settings live in ~/.config/git/delta.gitconfig
+  INCLUDE="$HOME/.config/git/delta.gitconfig"
+  git config --global --get-all include.path | grep -qxF "$INCLUDE" || \
+    git config --global --add include.path "$INCLUDE"
 fi
 
 echo "Done. Open a new Ghostty window (or run: exec zsh) to see the changes."
