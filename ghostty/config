@@ -37,8 +37,8 @@ macos-icon = custom-style
 macos-icon-ghost-color = #CDD6F4
 macos-icon-screen-color = #1E1E2E,#313244
 
-# Quick terminal (drop-down) on ctrl+`
-keybind = global:ctrl+grave_accent=toggle_quick_terminal
+# Quick terminal (drop-down) on cmd+` (overrides macOS window cycling)
+keybind = global:cmd+grave_accent=toggle_quick_terminal
 quick-terminal-position = top
 quick-terminal-animation-duration = 0.15
 

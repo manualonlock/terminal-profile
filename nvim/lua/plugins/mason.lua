@@ -37,6 +37,33 @@ return {
 				},
 			})
 
+			-- Python: use the project's .venv (or venv) automatically, an activated
+			-- $VIRTUAL_ENV wins. A pyrightconfig.json in the project overrides this.
+			vim.lsp.config("pyright", {
+				on_init = function(client)
+					local root = client.root_dir or client.config.root_dir
+					local candidates = {}
+					if vim.env.VIRTUAL_ENV then
+						table.insert(candidates, vim.env.VIRTUAL_ENV .. "/bin/python")
+					end
+					if root then
+						table.insert(candidates, root .. "/.venv/bin/python")
+						table.insert(candidates, root .. "/venv/bin/python")
+					end
+					for _, python in ipairs(candidates) do
+						if vim.uv.fs_stat(python) then
+							client.settings = vim.tbl_deep_extend(
+								"force",
+								client.settings or {},
+								{ python = { pythonPath = python } }
+							)
+							client:notify("workspace/didChangeConfiguration", { settings = client.settings })
+							return
+						end
+					end
+				end,
+			})
+
 			require("mason-lspconfig").setup({
 				ensure_installed = servers,
 				-- stylua is a formatter, not something we want running as an LSP

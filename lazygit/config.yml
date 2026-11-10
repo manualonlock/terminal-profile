@@ -21,5 +21,8 @@ git:
   diffRenderers:
     - colorArg: always
       command: delta --paging=never --features=lazygit
+# Work repos live on GitHub Enterprise (nshift.ghe.com) — tell lazygit it's GitHub
+services:
+  nshift.ghe.com: github:nshift.ghe.com
 os:
   editPreset: nvim-remote
