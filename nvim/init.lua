@@ -22,7 +22,7 @@ o.laststatus = 3 -- single global statusline
 o.pumheight = 12
 o.winborder = "rounded"
 o.list = true
-o.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+o.listchars = { tab = "  ", trail = "·", nbsp = "␣" }
 o.fillchars = { eob = " " }
 
 -- Brief highlight on yank

@@ -132,7 +132,7 @@ return {
 		version = "1.*", -- release tag => prebuilt fuzzy-matcher binary
 		event = { "InsertEnter", "CmdlineEnter" },
 		opts = {
-			keymap = { preset = "default" }, -- <C-y> accept, <C-n>/<C-p> navigate, <C-space> open
+			keymap = { preset = "enter" }, -- <CR> accept, <C-n>/<C-p> navigate, <C-space> open
 			appearance = { nerd_font_variant = "mono" },
 			completion = {
 				menu = { border = "rounded" },
